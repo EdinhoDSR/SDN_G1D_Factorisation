@@ -5,6 +5,7 @@ Created on Mon May 18 10:37:09 2020
 @author: edinh
 """
 from math import sqrt
+
 import time
 def lsqrt(n):
   x = n
@@ -80,9 +81,33 @@ def pollardrho(n):
     return [d, n//d]
  
 ##############################################################################
+def fermat(n, verbose=True):
     
+    a = lsqrt(n) # int(ceil(n**0.5))
+    b2 = a*a - n
+    b = lsqrt(n) # int(b2**0.5)
+    count = 0
+    while b*b != b2:
+        #if verbose:
+            #print('Trying: a=%s b2=%s b=%s' % (a, b2, b))
+        a = a + 1
+        b2 = a*a - n
+        b = lsqrt(b2) # int(b2**0.5)
+        count += 1
+    p=a+b
+    q=a-b
+    assert n == p * q
+    #print('a=',a)
+    #print('b=',b)
+    #print('p=',p)
+    #print('q=',q)
+    #print('pq=',p*q)
+    return [p, q]   
 
-def factpremiers(n):
+
+##############################################################################
+
+def Pfactpremiers(n):
     #liste des facteurs premiers de n, avec la fonction 'a, b = decomp(n)' 
     R = []  # liste des facteurs premiers trouvés
     P = [n]  # pile de calcul
@@ -92,6 +117,25 @@ def factpremiers(n):
             R.append(x)  # on a trouvé un facteur 1er => on ajoute à la liste
         else:
             a, b = pollardrho(x)  # on calcule une nouvelle décomposition
+            if a==1 or b==1:
+                # echec: x n'est pas 1er mais sa decomposition ne se fait pas
+                # on essaie une décomposition par division
+                a, b = facteursdiv2(x)
+            P.append(a)  # on empile a
+            P.append(b)  # on empile b
+    R.sort()
+    return R
+
+def Ffactpremiers(n):
+    #liste des facteurs premiers de n, avec la fonction 'a, b = decomp(n)' 
+    R = []  # liste des facteurs premiers trouvés
+    P = [n]  # pile de calcul
+    while P!=[]:
+        x = P.pop(-1)  # lecture et dépilage de la dernière valeur empilée
+        if estpremier(x):
+            R.append(x)  # on a trouvé un facteur 1er => on ajoute à la liste
+        else:
+            a, b = fermat(x)  # on calcule une nouvelle décomposition
             if a==1 or b==1:
                 # echec: x n'est pas 1er mais sa decomposition ne se fait pas
                 # on essaie une décomposition par division
@@ -115,15 +159,33 @@ def trivial(n):
     l.append(nb)
     return(l)  
     
-print("Entrez un nombre")
-n=int(input())
-
-start_time1 = time.perf_counter()
-L=trivial(n)
-end_time1=time.perf_counter()-start_time1
-start_time2 = time.perf_counter()
-R=factpremiers(n)
-end_time2=time.perf_counter()-start_time2
-print("la liste de facteurs est :",L)
-print("L'éxecution avec le programme trivial a pris",end_time1,"secondes")  
-print("L'éxecution avec l'algo de pollard a pris",end_time2,"secondes") 
+def main():
+    print("Voici la simulation de factorisation des grands nombres faites par le groupe G1D")
+    print("Nous avons trois algos, un trivial qui tente de diviser le nombre N par tous ceux inférieur à la racine carré de N")
+    print("Un algo basé sur celui de Pollard Rho")
+    print("Un algo basé sur celui de Fermat et qui ne marche qu'avec les nombres impairs")
+    while True:
+        print("")
+        print("Veuillez entrez un nombre puis appuyer sur la touche Entrée")
+        n=int(input())
+    
+        start_time1 = time.perf_counter()
+        T=trivial(n)
+        end_time1=time.perf_counter()-start_time1
+        print("la liste de facteurs obtenus avec l'algo trivial est :",T)
+        print("L'éxecution avec le programme trivial a pris",end_time1,"secondes")
+        
+        start_time2 = time.perf_counter()
+        P=Pfactpremiers(n)
+        end_time2=time.perf_counter()-start_time2
+        print("la liste de facteurs obtenus avec l'algo de pollard est :",P)
+        print("L'éxecution avec l'algo de pollard a pris",end_time2,"secondes")
+        
+        if n%2==1:
+            start_time3 = time.perf_counter()
+            F=Ffactpremiers(n)
+            end_time3=time.perf_counter()-start_time3
+            print("la liste de facteurs obtenus avec l'algo de fermat est :",F)
+            print("L'éxecution avec l'algo de fermat a pris",end_time3,"secondes") 
+        
+main()
