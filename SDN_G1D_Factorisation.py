@@ -169,7 +169,9 @@ def main():
         print("")
         print("Veuillez entrez un nombre puis appuyer sur la touche Entrée")
         n=int(input())
+        print("Le programme s'exécute")
         print("")
+        
         start_time1 = time.perf_counter()
         T=trivial(n)
         end_time1=time.perf_counter()-start_time1
@@ -182,7 +184,7 @@ def main():
         print("la liste de facteurs obtenus avec l'algo de pollard est :",P)
         print("L'éxecution avec l'algo de pollard a pris",end_time2,"secondes")
         
-        if n%2==1 or len(str(n))<12:
+        if n%2==1:
             start_time3 = time.perf_counter()
             F=Ffactpremiers(n)
             end_time3=time.perf_counter()-start_time3
