@@ -160,15 +160,16 @@ def trivial(n):
     return(l)  
     
 def main():
-    print("Voici la simulation de factorisation des grands nombres faites par le groupe G1D")
+    print("Voici la simulation de factorisation des grands nombres faite par le groupe G1D")
     print("Nous avons trois algos, un trivial qui tente de diviser le nombre N par tous ceux inférieur à la racine carré de N")
     print("Un algo basé sur celui de Pollard Rho")
     print("Un algo basé sur celui de Fermat et qui ne marche qu'avec les nombres impairs")
+    print("""Si vous dépassez dix chiffres, ça risque de prendre un peu de temps :)""")
     while True:
         print("")
         print("Veuillez entrez un nombre puis appuyer sur la touche Entrée")
         n=int(input())
-    
+        print("")
         start_time1 = time.perf_counter()
         T=trivial(n)
         end_time1=time.perf_counter()-start_time1
@@ -181,7 +182,7 @@ def main():
         print("la liste de facteurs obtenus avec l'algo de pollard est :",P)
         print("L'éxecution avec l'algo de pollard a pris",end_time2,"secondes")
         
-        if n%2==1:
+        if n%2==1 or len(str(n))<12:
             start_time3 = time.perf_counter()
             F=Ffactpremiers(n)
             end_time3=time.perf_counter()-start_time3
@@ -189,3 +190,4 @@ def main():
             print("L'éxecution avec l'algo de fermat a pris",end_time3,"secondes") 
         
 main()
+          
