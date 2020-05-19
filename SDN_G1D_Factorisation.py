@@ -82,7 +82,8 @@ def pollardrho(n):
  
 ##############################################################################
 def fermat(n, verbose=True):
-    
+    if n%2==0:
+        return [2,int(n/2)]
     a = lsqrt(n) # int(ceil(n**0.5))
     b2 = a*a - n
     b = lsqrt(n) # int(b2**0.5)
@@ -163,7 +164,7 @@ def main():
     print("Voici la simulation de factorisation des grands nombres faite par le groupe G1D")
     print("Nous avons trois algos, un trivial qui tente de diviser le nombre N par tous ceux inférieur à la racine carré de N")
     print("Un algo basé sur celui de Pollard Rho")
-    print("Un algo basé sur celui de Fermat et qui ne marche qu'avec les nombres impairs")
+    print("Un algo basé sur celui de Fermat")
     print("""Si vous dépassez dix chiffres, ça risque de prendre un peu de temps :)""")
     while True:
         print("")
@@ -184,12 +185,12 @@ def main():
         print("la liste de facteurs obtenus avec l'algo de pollard est :",P)
         print("L'éxecution avec l'algo de pollard a pris",end_time2,"secondes")
         
-        if n%2==1:
-            start_time3 = time.perf_counter()
-            F=Ffactpremiers(n)
-            end_time3=time.perf_counter()-start_time3
-            print("la liste de facteurs obtenus avec l'algo de fermat est :",F)
-            print("L'éxecution avec l'algo de fermat a pris",end_time3,"secondes") 
+    
+        start_time3 = time.perf_counter()
+        F=Ffactpremiers(n)
+        end_time3=time.perf_counter()-start_time3
+        print("la liste de facteurs obtenus avec l'algo de fermat est :",F)
+        print("L'éxecution avec l'algo de fermat a pris",end_time3,"secondes") 
         
 main()
           
